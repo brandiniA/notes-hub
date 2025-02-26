@@ -46,9 +46,9 @@ Each type has advantages and disadvantages, requiring careful selection based on
 
 A monolithic frontend is an architecture where the entire user interface of an application is developed and maintained as a single unit. In this approach:
 
-❌ **Large and Complex Codebase** – Over time, the codebase grows, making it difficult to manage.
-❌ **Single Points of Failure** – If one component encounters an error, the entire application may be affected.
-❌ **Long Deployment Times** – Any minor change requires redeploying the entire application, increasing the risk of errors and slowing down the process.
+❌ **Large and Complex Codebase** – Over time, the codebase grows, making it difficult to manage.  
+❌ **Single Points of Failure** – If one component encounters an error, the entire application may be affected.  
+❌ **Long Deployment Times** – Any minor change requires redeploying the entire application, increasing the risk of errors and slowing down the process.  
 
 This model has been widely used, but as web applications have grown in complexity, scalability and maintainability challenges have emerged. **Micro frontends** were introduced as a solution to these issues.
 
