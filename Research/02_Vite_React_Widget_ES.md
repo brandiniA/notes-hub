@@ -589,3 +589,4 @@ Ahora cuentas con una guía **integral** para construir un widget de React embeb
 
 Con estos pasos, podrás desarrollar, probar y desplegar un widget **listo para producción** que cualquier sitio web puede embeber. **¡Feliz codificación!**
 
+Fuente https://makerkit.dev/blog/tutorials/embeddable-widgets-react

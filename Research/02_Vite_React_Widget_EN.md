@@ -596,3 +596,4 @@ You now have a **comprehensive guide** to building an embeddable React widget us
 
 With these steps, you can confidently develop, test, and deploy a **production-ready** widget that any website can embed. **Happy coding!**
 
+Source https://makerkit.dev/blog/tutorials/embeddable-widgets-react
