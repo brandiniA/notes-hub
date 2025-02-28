@@ -446,7 +446,7 @@ Define environment variables in these files. Example:
 
 ```
 # .env.development
-WIDGET_CSS_URL=http://localhost:3334/style.css
+WIDGET_CSS_URL=http://localhost:3334/widget.css
 WIDGET_NAME=widget.js
 ```
 
