@@ -23,10 +23,7 @@ Necesitaremos dependencias **core** y **de desarrollo**:
 npm install react react-dom
 
 # Dependencias de desarrollo
-npm install -D tailwindcss postcss tslib @rollup/plugin-babel
-@rollup/plugin-commonjs
-@rollup/plugin-node-resolve @rollup/plugin-typescript @rollup/plugin-terser
-rollup rollup-plugin-postcss @babel/preset-react @babel/preset-typescript @types/react @types/react-dom typescript @types/node @rollup/plugin-replace rollup-plugin-polyfill-node rollup-plugin-tsconfig-paths rollup-plugin-visualizer rollup-plugin-inject-process-env dotenv
+npm install -D tailwindcss@3 postcss tslib @rollup/plugin-babel @rollup/plugin-commonjs @rollup/plugin-node-resolve @rollup/plugin-typescript @rollup/plugin-terser rollup rollup-plugin-postcss @babel/preset-react @babel/preset-typescript @types/react @types/react-dom typescript @types/node @rollup/plugin-replace rollup-plugin-polyfill-node rollup-plugin-tsconfig-paths rollup-plugin-visualizer rollup-plugin-inject-process-env dotenv
 ```
 
 ---
@@ -97,15 +94,14 @@ Especifica las rutas a tus componentes para que Tailwind pueda purgar estilos no
 ```js
 module.exports = {
   plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
+    tailwindcss: "./tailwind.config.mjs",
   },
 };
 ```
 
 ### 3.4 Archivo CSS Principal
 
-Crea **`src/styles/style.css`** (o el nombre que prefieras) para importar las capas de Tailwind:
+Crea **`src/widget/styles/style.css`** (o el nombre que prefieras) para importar las capas de Tailwind:
 
 ```css
 @tailwind base;
@@ -114,7 +110,7 @@ Crea **`src/styles/style.css`** (o el nombre que prefieras) para importar las ca
 
 /* Opcionalmente, agrega estilos personalizados para tu widget */
 .widget-container {
-  @apply fixed bottom-5 right-5 w-[300px] h-[400px] bg-white border border-gray-200 rounded-lg shadow-lg z-[9999];
+  @apply fixed bottom-5 right-5 w-[300px] h-[400px] bg-white border border-gray-200 text-black rounded-lg shadow-lg z-[9999];
 }
 
 .widget-button {
@@ -130,7 +126,7 @@ Crea **`src/styles/style.css`** (o el nombre que prefieras) para importar las ca
 }
 ```
 
-Luego, importa este CSS en **el archivo de entrada del widget** (por ejemplo, `src/index.tsx`) o en el componente contenedor del widget:
+Luego, importa este CSS en **el archivo de entrada del widget** (por ejemplo, `src/widget/index.tsx`) o en el componente contenedor del widget:
 
 ```tsx
 import "./styles/style.css";
@@ -367,14 +363,14 @@ export function Widget({ clientKey }: WidgetProps) {
 ---
 ## 6. Punto de Entrada e Inicialización
 
-### 6.1 Archivo Principal de Entrada (`src/index.tsx`)
+### 6.1 Archivo Principal de Entrada (`src/widget/index.tsx`)
 
 Este archivo inicializa React cuando el widget se carga y **sirve como el punto de entrada principal** para Rollup.
 
 ```tsx
 import { hydrateRoot } from 'react-dom/client';
-import { WidgetContainer } from './widget/components/widget-container';
-import './widget/styles/style.css'; // Tailwind & estilos personalizados
+import { WidgetContainer } from './components/widget-container';
+import './styles/style.css';
 
 function initializeWidget() {
   if (document.readyState !== 'loading') {
@@ -393,7 +389,9 @@ function onReady() {
 
     shadowRoot.id = 'widget-root';
 
-    const component = <WidgetContainer clientKey={clientKey} />;
+    const component = (
+      <WidgetContainer clientKey={clientKey} />
+    );
 
     shadow.appendChild(shadowRoot);
     injectStyle(shadowRoot);
@@ -408,24 +406,25 @@ function onReady() {
 function injectStyle(shadowRoot: HTMLElement) {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  // Esta URL puede configurarse vía variables de entorno
+  // This URL can be set via environment variables
   link.href = process.env.WIDGET_CSS_URL || '/style.css';
   shadowRoot.appendChild(link);
 }
 
-function getClientKey(): string {
-  // Recuperar data-client-key desde la etiqueta <script>
-  const script = document.currentScript as HTMLScriptElement;
+function getClientKey() {
+  // Retrieve the data-client-key from the script tag
+    const script = document.currentScript as HTMLScriptElement;
   const clientKey = script?.getAttribute('data-client-key');
-
+  
   if (!clientKey) {
-    throw new Error('Falta el atributo data-client-key');
+    throw new Error('Missing data-client-key attribute');
   }
-
+  
   return clientKey;
 }
 
 initializeWidget();
+
 ```
 
 - **`onReady()`**: Se llama cuando el DOM está listo; crea un shadow root y renderiza el widget.

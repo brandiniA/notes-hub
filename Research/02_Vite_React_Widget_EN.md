@@ -23,11 +23,7 @@ We'll need both **core** and **dev** dependencies:
 npm install react react-dom
 
 # Development dependencies
-npm install -D tailwindcss postcss tslib @rollup/plugin-babel
-@rollup/plugin-commonjs
-@rollup/plugin-node-resolve @rollup/plugin-typescript @rollup/plugin-terser
-rollup rollup-plugin-postcss @babel/preset-react @babel/preset-typescript @types/react @types/react-dom typescript @types/node @rollup/plugin-replace rollup-plugin-polyfill-node rollup-plugin-tsconfig-paths rollup-plugin-visualizer rollup-plugin-inject-process-env dotenv
-
+npm install -D tailwindcss@3 postcss tslib @rollup/plugin-babel @rollup/plugin-commonjs @rollup/plugin-node-resolve @rollup/plugin-typescript @rollup/plugin-terser rollup rollup-plugin-postcss @babel/preset-react @babel/preset-typescript @types/react @types/react-dom typescript @types/node @rollup/plugin-replace rollup-plugin-polyfill-node rollup-plugin-tsconfig-paths rollup-plugin-visualizer rollup-plugin-inject-process-env dotenv
 ```
 
 ---
@@ -98,15 +94,14 @@ Specify the paths to your components so Tailwind can purge unused styles.
 ```js
 module.exports = {
   plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
+    tailwindcss: "./tailwind.config.mjs",
   },
 };
 ```
 
 ### 3.4 Main CSS File
 
-Create **`src/styles/style.css`** (or any name you prefer) to import Tailwind layers:
+Create **`src/widget/styles/style.css`** (or any name you prefer) to import Tailwind layers:
 
 ```css
 @tailwind base;
@@ -115,7 +110,7 @@ Create **`src/styles/style.css`** (or any name you prefer) to import Tailwind la
 
 /* Optionally add custom styles for your widget */
 .widget-container {
-  @apply fixed bottom-5 right-5 w-[300px] h-[400px] bg-white border border-gray-200 rounded-lg shadow-lg z-[9999];
+  @apply fixed bottom-5 right-5 w-[300px] h-[400px] bg-white border border-gray-200 text-black rounded-lg shadow-lg z-[9999];
 }
 
 .widget-button {
@@ -131,7 +126,7 @@ Create **`src/styles/style.css`** (or any name you prefer) to import Tailwind la
 }
 ```
 
-Then import this CSS inside your **widget entry** (e.g., `src/index.tsx`) or in the widget container component:
+Then import this CSS inside your **widget entry** (e.g., `src/widget/index.tsx`) or in the widget container component:
 
 ```tsx
 import "./styles/style.css";
@@ -372,14 +367,14 @@ export function Widget({ clientKey }: WidgetProps) {
 ---
 ## 6. Entry Point & Initialization
 
-### 6.1 Main Entry File (`src/index.tsx`)
+### 6.1 Main Entry File (`src/widget/index.tsx`)
 
 This file bootstraps React when the widget is loaded and **serves as the primary bundle entry** for Rollup.
 
 ```tsx
 import { hydrateRoot } from 'react-dom/client';
-import { WidgetContainer } from './widget/components/widget-container';
-import './widget/styles/style.css'; // Tailwind & custom styles
+import { WidgetContainer } from './components/widget-container';
+import './styles/style.css';
 
 function initializeWidget() {
   if (document.readyState !== 'loading') {
@@ -398,7 +393,9 @@ function onReady() {
 
     shadowRoot.id = 'widget-root';
 
-    const component = <WidgetContainer clientKey={clientKey} />;
+    const component = (
+      <WidgetContainer clientKey={clientKey} />
+    );
 
     shadow.appendChild(shadowRoot);
     injectStyle(shadowRoot);
@@ -418,19 +415,20 @@ function injectStyle(shadowRoot: HTMLElement) {
   shadowRoot.appendChild(link);
 }
 
-function getClientKey(): string {
+function getClientKey() {
   // Retrieve the data-client-key from the script tag
-  const script = document.currentScript as HTMLScriptElement;
+    const script = document.currentScript as HTMLScriptElement;
   const clientKey = script?.getAttribute('data-client-key');
-
+  
   if (!clientKey) {
     throw new Error('Missing data-client-key attribute');
   }
-
+  
   return clientKey;
 }
 
 initializeWidget();
+
 ```
 
 - **`onReady()`**: Called when the DOM is ready; creates a shadow root and renders the widget.
