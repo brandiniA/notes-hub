@@ -181,7 +181,7 @@ const ENV_VARIABLES = config({
 const fileName = ENV_VARIABLES.WIDGET_NAME || 'widget.js';
 
 export default {
-  input: './src/index.tsx',
+  input: './src/widget/index.tsx',
   output: {
     file: `dist/${fileName}`,
     format: 'iife', // Immediately Invoked Function Expression
