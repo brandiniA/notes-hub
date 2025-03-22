@@ -185,3 +185,7 @@ Este documento tiene como objetivo organizar y clasificar diversos recursos de d
 ## Animaciones en React
 - [Motion](https://motion.dev/) – Librería de animaciones.
 - [React Spring](https://www.react-spring.dev/) – Animaciones fluidas en React.
+
+## Libros
+- **You Don't Know JS Yet: Get Started** - 1
+- **You Don't Know JS Yet: Scope & Closures** - 2
