@@ -5,7 +5,7 @@ This document is designed to organize and classify various development resources
 ---
 
 ## Micro Frontends
-- [React Haiku](https://www.reacthaiku.dev/docs/intro)
+- [Bit.dev](https://bit.dev/) – Share and manage reusable components.
 - [Module Federation](https://module-federation.io/)
 
 ---
@@ -149,8 +149,7 @@ This document is designed to organize and classify various development resources
 
 ## Development Tools and Components
 - [TanStack](https://tanstack.com/) – Collection of libraries (e.g., React Query, Table, etc.).
-- [Bit.dev](https://bit.dev/) – Share and manage reusable components.
-
+- [React Haiku](https://www.reacthaiku.dev/docs/intro)
 ---
 
 ## VS Code Extensions
@@ -189,3 +188,5 @@ This document is designed to organize and classify various development resources
 ## Books
 - **You Don't Know JS Yet: Get Started** - 1
 - **You Don't Know JS Yet: Scope & Closures** - 2
+- **Programming Ruby 3.3**
+- **The Road to React: The React.js 19 with Hooks in JavaScript Book**

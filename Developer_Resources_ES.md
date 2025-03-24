@@ -5,9 +5,8 @@ Este documento tiene como objetivo organizar y clasificar diversos recursos de d
 ---
 
 ## Micro Frontends
-- [React Haiku](https://www.reacthaiku.dev/docs/intro)
+- [Bit.dev](https://bit.dev/) – Compartir y gestionar componentes reutilizables.
 - [Module Federation](https://module-federation.io/)
-
 ---
 
 ## Paquetes de Node y Librerías JS
@@ -149,7 +148,7 @@ Este documento tiene como objetivo organizar y clasificar diversos recursos de d
 
 ## Herramientas de Desarrollo y Componentes
 - [TanStack](https://tanstack.com/) – Colección de librerías (p.ej., React Query, Table, etc.).
-- [Bit.dev](https://bit.dev/) – Compartir y gestionar componentes reutilizables.
+- [React Haiku](https://www.reacthaiku.dev/docs/intro)
 
 ---
 
