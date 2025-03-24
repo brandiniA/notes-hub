@@ -189,3 +189,5 @@ Este documento tiene como objetivo organizar y clasificar diversos recursos de d
 ## Libros
 - **You Don't Know JS Yet: Get Started** - 1
 - **You Don't Know JS Yet: Scope & Closures** - 2
+- **Programming Ruby 3.3**
+- **The Road to React: The React.js 19 with Hooks in JavaScript Book**
