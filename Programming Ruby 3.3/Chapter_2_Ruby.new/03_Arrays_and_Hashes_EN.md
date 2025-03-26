@@ -82,3 +82,11 @@ histogram["ruby"]   # => 0
 histogram["ruby"] = histogram["ruby"] + 1
 histogram["ruby"]   # => 1
 ```
+
+---
+
+## What Does "Arbitrary Objects" Mean?
+
+When we say that keys and values in a hash can be **arbitrary objects**, we mean that they can be of any type: numbers, strings, symbols, arrays, hashes, or even instances of user-defined classes. There are no strict restrictions on the kind of object you can use—what matters most is that, for keys, they remain unique and comparable.
+
+---

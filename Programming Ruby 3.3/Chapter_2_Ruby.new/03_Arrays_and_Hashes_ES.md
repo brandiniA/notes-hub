@@ -84,3 +84,11 @@ histogram["ruby"]   # => 0
 histogram["ruby"] = histogram["ruby"] + 1
 histogram["ruby"]   # => 1
 ```
+
+---
+
+## ¿Qué Significa "Objetos Arbitrarios"?
+
+Cuando decimos que las claves y los valores en un hash pueden ser **objetos arbitrarios**, nos referimos a que pueden ser de cualquier tipo: números, cadenas, símbolos, arreglos, hashes o incluso instancias de clases definidas por el usuario. No existe una restricción estricta sobre el tipo de objeto que se puede utilizar; lo importante es que, en el caso de las claves, sean únicas y comparables.
+
+---
