@@ -87,9 +87,11 @@ const App = () => {
 #### Before (State up, all children re-render):
 
 ```
-        [State update]
-          /          [Button/Modal]*   [Slow components]*
-        /      [Other...]* [More...]*
+           [State update]
+               /        |            \
+ [Button/Modal]* [Slow components]* [Other...]*  
+                                           |
+                                        [More...]*  
 
 * = unnecessary re-renders
 ```
@@ -97,8 +99,9 @@ const App = () => {
 #### After (State down, only relevant sub-tree re-renders):
 
 ```
-        [App]
-         /   |    [ButtonWithModalDialog]* [Slow components] [Other...]
+         [                 App                      ]
+           /                     |               \
+[ButtonWithModalDialog]*  [Slow components]  [Other...]
 
   (State is here)
 ```

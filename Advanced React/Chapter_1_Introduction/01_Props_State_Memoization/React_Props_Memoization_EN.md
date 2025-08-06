@@ -47,9 +47,12 @@ Normally, when state changes **high in the tree**, React re-renders all children
 ### Diagram — Memo prevents unnecessary re-renders
 
 ```
-         [State update]
-            /          [React.memo]     [ComponentB]*
-      /       [ChildA]   [ChildB]
+             [State update]
+                /     |       \
+     [ChildA]* [React.memo] [ComponentB]*
+        /
+  [SubChildA1]*
+
 ```
 
 - **Red arrows/components:** re-rendered due to state change.
