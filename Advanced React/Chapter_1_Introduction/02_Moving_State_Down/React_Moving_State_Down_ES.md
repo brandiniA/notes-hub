@@ -87,9 +87,11 @@ const App = () => {
 #### Antes (Estado arriba, todos los hijos se re-renderizan):
 
 ```
-        [Actualización de estado]
-          /          [Button/Modal]*   [Componentes lentos]*
-        /      [Otros...]* [Más...]*
+           [Actualización de estado]
+               /        |            \
+ [Button/Modal]* [Componentes lentos]* [Otros...]*  
+                                           |
+                                        [Más...]*  
 
 * = re-renderizados innecesarios
 ```
@@ -97,8 +99,10 @@ const App = () => {
 #### Después (Estado abajo, solo el subárbol relevante se re-renderiza):
 
 ```
-        [App]
-         /   |    [ButtonWithModalDialog]* [Componentes lentos] [Otros...]
+         [                      App                      ]
+           /                       |                 \
+[ButtonWithModalDialog]*  [Componentes lentos]  [Otros...]
+
 
   (El estado está aquí)
 ```

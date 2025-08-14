@@ -47,9 +47,12 @@ Normalmente, cuando el estado cambia **alto en el árbol**, React re-renderiza t
 ### Diagrama — Memo evita re-renderizados innecesarios
 
 ```
-         [State update]
-            /          [React.memo]     [ComponentB]*
-      /       [ChildA]   [ChildB]
+             [State update]
+                /     |       \
+     [ChildA]* [React.memo] [ComponentB]*
+        /
+  [SubChildA1]*
+
 ```
 
 - **Flechas/componentes rojos:** re-renderizados por el cambio de estado.
