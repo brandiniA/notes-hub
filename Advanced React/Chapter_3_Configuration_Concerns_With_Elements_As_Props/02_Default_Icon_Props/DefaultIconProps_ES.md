@@ -106,7 +106,7 @@ const Button = ({ appearance = 'secondary', size = 'medium', icon }) => {
   const clonedIcon = React.cloneElement(icon, mergedProps);
 
   return (
-    <button aria-disabled={appearance === 'disabled'}>
+    <button>
       Submit {clonedIcon}
     </button>
   );

@@ -1,14 +1,14 @@
-# ✨ Elements as Props
+# ✨ Chapter 3. Configuration Concerns with Elements as Props
 
 > **Quick summary:**  
-> Replacing configuration props with elements as props reduces complexity, keeps components cleaner, and gives consumers full control over customization.
+> Over-configuring components with props can quickly lead to complexity and broken functionality. Using *elements as props* provides a cleaner and more flexible approach.
 
 ---
 
-## ❗ Problem
+## ⚠️ The Problem
 
-When building reusable components, it’s tempting to add a new prop for every new requirement.  
-For example, a `Button` that should display a loading state might start simple:
+Imagine implementing a `Button` component.  
+A common requirement is to show a **loading icon on the right** when the button is in a *loading state* (e.g., during form submission).
 
 ```jsx
 const Button = ({ isLoading }) => {
@@ -16,12 +16,15 @@ const Button = ({ isLoading }) => {
 }
 ```
 
-But soon, new demands appear:  
-- Support different icons (not just loading).  
-- Control icon **color**, **size**, and **position**.  
-- Allow **avatars** or custom visuals instead of icons.  
+At first this works fine. But then:  
 
-The component explodes with configuration props:
+- Next day: button must support **different icons**, not just loading.  
+- Then: icons must allow **color customization**.  
+- Then: add **size control**.  
+- Then: icons must appear on the **left side** too… maybe even avatars.  
+
+Eventually, half the props exist only to manage icons.  
+The component becomes unreadable, hard to maintain, and fragile.  
 
 ```jsx
 const Button = ({
@@ -31,21 +34,16 @@ const Button = ({
     iconLeftSize,
     isIconLeftAvatar,
 }) => {
-    // too many props, unclear behavior
+    // Too many props — hard to maintain
     return ...
 }
 ```
 
-⚠️ At this point:  
-- Half the props exist *just to manage icons*.  
-- Each new feature risks breaking existing functionality.  
-- The component is hard to maintain and confusing to use.
-
 ---
 
-## 📚 Concept 1 — Passing Elements as Props
+## 📚 Concept 1 — Passing Elements Instead of Props
 
-Instead of piling up configuration props, allow the consumer to **pass a ready-made element**:
+Instead of configuring icons through multiple props, accept them as *elements*. The consumer has full control over styling, color, and placement.
 
 ```jsx
 const Button = ({ icon }) => {
@@ -53,9 +51,7 @@ const Button = ({ icon }) => {
 }
 ```
 
-This drastically simplifies the component. The parent doesn’t need to know *how* the icon is configured — only *where* to place it.
-
-### Usage examples
+**Usage:**
 
 ```jsx
 <Button icon={<Loading />} />
@@ -64,21 +60,18 @@ This drastically simplifies the component. The parent doesn’t need to know *ho
 <Button icon={<Avatar />} />
 ```
 
-<details>
-<summary>🔍 **How does it work?**</summary>
-
-- Props no longer act as *instructions*; they carry the **element itself**.  
-- The button only decides *placement* (`before` or `after` the text).  
-- Consumers configure the element (icon, avatar, tooltip, etc.) however they want.  
-
-</details>
+> [!TIP]  
+> Keep configuration flexible but avoid hiding defaults. Document clearly how consumers can pass elements.
 
 ---
 
-## 🛠️ Concept 2 — Elements in Complex Layouts
+## 📚 Concept 2 — Elements as Props in Complex Components
 
-This idea shines in **container components** like dialogs or layouts.  
-If you tried to handle every variation with configuration props, things would get unmanageable.
+Using configuration props for complex components (like modals or layouts) quickly becomes unmanageable.  
+Different dialogs might need one, two, or three buttons—some primary, some links, some with tooltips or icons.  
+Passing all of that through props would be chaotic.
+
+With **elements as props**, this becomes simple:
 
 ```jsx
 const ModalDialog = ({ content, footer }) => {
@@ -91,73 +84,79 @@ const ModalDialog = ({ content, footer }) => {
 }
 ```
 
-### Usage
+**Usage examples:**
 
 ```jsx
+<ModalDialog content={<SomeFormHere />} footer={<SubmitForm />} />
+
+<ModalDialog 
+    content={<SomeFormHere />} 
+    footer={<><SubmitForm /><CancelButton /></>} 
+/>
+```
+
+The same pattern applies to layouts that should render **anything** inside, such as a three-column layout:
+
+```jsx
+<ThreeColumnsLayout 
+    leftColumn={<Sidebar />}
+    middleColumn={<MainContent />}
+    rightColumn={<Notifications />}
+/>
+```
+
+Here, the component doesn’t care what you pass—it only guarantees **placement**.  
+This makes it both powerful and flexible.
+
+---
+
+## 📚 Concept 3 — `children` as Syntax Sugar
+
+When something is the **main part** of the component (e.g., modal content or the middle column), using `children` is cleaner than a dedicated prop:
+
+```jsx
+// Before
 <ModalDialog content={<SomeFormHere />} footer={<SubmitButton />} />
 
-<ModalDialog
-    content={<SomeFormHere />}
-    footer={<><SubmitButton /> <CancelButton /></>}
-/>
-```
-
-And for layouts:
-
-```jsx
-<ThreeColumnLayout 
-    leftColumn={<Something />}
-    middleColumn={<OtherThing />}
-    rightColumn={<SomethingElse />}
-/>
-```
-
-✅ Instead of forcing endless props (`footerButtonCount`, `isPrimary`, `footerLinks`…), the parent just **passes the elements directly**.
-
-> [!TIP]  
-> Use elements as props when the parent only needs to **define structure** and not dictate the internal details.
-
----
-
-## ✅ Best Practices
-
-- ✅ Use **elements as props** when customization is critical.  
-- ✅ Keep parent components focused on *layout/placement*.  
-- ✅ Delegate configuration (color, size, content) to consumers.  
-- 🚫 Don’t overuse config props for things that could be passed as elements.  
-
----
-
-## 🚀 Full Example — Using `children`
-
-The `children` prop is just syntactic sugar for passing elements.  
-It’s perfect for the *main content* of a container, like the body of a modal.
-
-```jsx
-// before
-<ModalDialog 
-    content={<SomeFormHere />}
-    footer={<SubmitButton />}
-/>
-
-// after
+// After
 <ModalDialog footer={<SubmitButton />}>
     <SomeFormHere />
 </ModalDialog>
 ```
 
-### Implementation
+Always remember:  
+- `children` is nothing more than a prop.  
+- The nested syntax is just **syntax sugar** for passing that prop.  
+
+---
+
+## 🚀 Full Example — Three Column Layout
+
+Some components naturally benefit from element props, such as a layout with variable content.
 
 ```jsx
-const ModalDialog = ({ children, footer }) => {
+const ThreeColumnLayout = ({ leftColumn, middleColumn, rightColumn }) => {
     return (
-        <div className="dialog">
-            <div className="content">{children}</div>
-            <div className="footer">{footer}</div>
+        <div className="three-column">
+            <div>{leftColumn}</div>
+            <div>{middleColumn}</div>
+            <div>{rightColumn}</div>
         </div>
     )
 }
 ```
+
+**Usage:**
+
+```jsx
+<ThreeColumnLayout
+    leftColumn={<Sidebar />}
+    middleColumn={<MainContent />}
+    rightColumn={<Notifications />}
+/>
+```
+
+---
 
 ## 📖 Glossary
 
